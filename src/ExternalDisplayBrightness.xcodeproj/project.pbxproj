@@ -12,7 +12,6 @@
 		A40D186A217A044600477727 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A40D1869217A044600477727 /* Assets.xcassets */; };
 		A40D1877217A047600477727 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D1875217A047600477727 /* PreferencesWindowController.swift */; };
 		A40D187A217A187100477727 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D1879217A187100477727 /* LoginItemManager.swift */; };
-		A40D187C217A3FFA00477727 /* KeyboardShortcutsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D187B217A3FFA00477727 /* KeyboardShortcutsManager.swift */; };
 		A40D187E217A422900477727 /* BrightnessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D187D217A422900477727 /* BrightnessManager.swift */; };
 		A4BD16BA218C76F300209983 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A4BD16BC218C76F300209983 /* Localizable.strings */; };
 		A4D84BA721CC49DF00FD4238 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D84BA921CC49DF00FD4238 /* PreferencesWindow.xib */; };
@@ -28,7 +27,6 @@
 		A40D186E217A044600477727 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A40D1875217A047600477727 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		A40D1879217A187100477727 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
-		A40D187B217A3FFA00477727 /* KeyboardShortcutsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsManager.swift; sourceTree = "<group>"; };
 		A40D187D217A422900477727 /* BrightnessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrightnessManager.swift; sourceTree = "<group>"; };
 		A4841A9621D94498008BAF21 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		A4BD16BB218C76F300209983 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -76,7 +74,6 @@
 				A40D1867217A044500477727 /* AppDelegate.swift */,
 				A40D187D217A422900477727 /* BrightnessManager.swift */,
 				A4F33F4721823094002074F5 /* DDC.swift */,
-				A40D187B217A3FFA00477727 /* KeyboardShortcutsManager.swift */,
 				A40D1879217A187100477727 /* LoginItemManager.swift */,
 				A40D1875217A047600477727 /* PreferencesWindowController.swift */,
 				A4D84BA921CC49DF00FD4238 /* PreferencesWindow.xib */,
@@ -164,7 +161,6 @@
 				A40D1877217A047600477727 /* PreferencesWindowController.swift in Sources */,
 				A40D1868217A044500477727 /* AppDelegate.swift in Sources */,
 				A40D187E217A422900477727 /* BrightnessManager.swift in Sources */,
-				A40D187C217A3FFA00477727 /* KeyboardShortcutsManager.swift in Sources */,
 				A40D187A217A187100477727 /* LoginItemManager.swift in Sources */,
 				A4F33F4821823094002074F5 /* DDC.swift in Sources */,
 			);
@@ -326,8 +322,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = B227VTMZ94;
 				INFOPLIST_FILE = ExternalDisplayBrightness/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -335,6 +333,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nesveda.ExternalDisplayBrightness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -343,8 +342,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = B227VTMZ94;
 				INFOPLIST_FILE = ExternalDisplayBrightness/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -352,6 +353,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nesveda.ExternalDisplayBrightness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;

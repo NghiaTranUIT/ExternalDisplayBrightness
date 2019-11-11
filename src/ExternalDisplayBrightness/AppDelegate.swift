@@ -18,28 +18,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			"showPreferencesOnNextLaunch": true,
 		])
 		
-		// get the Accessibility privileges status
-		let (privileged, willEnable) = acquirePrivileges()
-		
-		if privileged {
-			// force BrightnessManager to load
-			_ = BrightnessManager.shared
-		}
-		else if !willEnable {
-			NSApplication.shared.terminate(self)
-		}
-		
+        _ = BrightnessManager.shared
 		self.preferencesWindowController = PreferencesWindowController()
-		
-		// open the preferences window on first launch, on launch which is not from a login item, or when the user didn't grant Accessibility privileges
-		let event = NSAppleEventManager.shared().currentAppleEvent
-		if (!(event?.eventID == kAEOpenApplication && event?.paramDescriptor(forKeyword: keyAEPropData)?.enumCodeValue == keyAELaunchedAsLogInItem))
-			|| UserDefaults.standard.bool(forKey: "showPreferencesOnNextLaunch") || !privileged
-		{
-			self.activateApp(ignoringOtherApps: privileged)
-			// display the preferences window after a short delay, otherwise there is a chance we will not own the menubar
-			DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(150)) { self.showPreferencesWindow(self) }
-		}
+		self.showPreferencesWindow(self)
 	}
 	
 	// show the preferences window when the user tries to launch the app and it's already running
@@ -73,40 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	// show the main menu and Dock icon
 	func activateApp(ignoringOtherApps force: Bool = false) {
-		NSApplication.shared.setActivationPolicy(.regular)
-		NSApplication.shared.activate(ignoringOtherApps: force)
+		NSApplication.shared.activate(ignoringOtherApps: true)
 	}
-	
-	// hide the main menu and Dock icon
-	func deactivateApp() {
-		DispatchQueue.main.async { NSApplication.shared.setActivationPolicy(.accessory) }
-	}
-	
-	// try to get Accessibility privileges, asking the user for them nicely if they're not granted
-	@discardableResult
-	private func acquirePrivileges() -> (privileged: Bool, willUserEnablePrivileges: Bool) {
-		let accessEnabled = AXIsProcessTrusted()
-		var willEnable = false
-		if !accessEnabled {
-			self.activateApp(ignoringOtherApps: true)
-			let alert = NSAlert()
-			alert.messageText = NSLocalizedString("AXProcessUntrustedAlertMessageText", comment: "Message text for the alert about missing accessibility permissions")
-			alert.informativeText = NSLocalizedString("AXProcessUntrustedAlertInformativeText", comment: "Informative text for the alert about missing accessibility permissions")
-			alert.alertStyle = .warning
-			alert.addButton(withTitle: NSLocalizedString("AXProcessUntrustedAlertConfirmButton", comment: "Confirmation button title for the alert about missing accessibility permissions"))
-			alert.addButton(withTitle: NSLocalizedString("AXProcessUntrustedAlertCancelButton", comment: "Cancel button title for the alert about missing accessibility permissions"))
-			
-			let result = alert.runModal()
-			if result == .alertFirstButtonReturn {
-				willEnable = true
-				AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeUnretainedValue(): true] as CFDictionary)
-				
-				let runningApps = NSWorkspace.shared.runningApplications
-				let authApp = runningApps.filter({ app in app.bundleIdentifier == "com.apple.accessibility.universalAccessAuthWarn" }).first
-				authApp?.activate(options: .activateIgnoringOtherApps)
-			}
-		}
-		
-		return (accessEnabled, willEnable)
-	}
+
 }

@@ -216,24 +216,12 @@ internal class BrightnessManager: NSObject {
 	
 	// the display handler for each connected display
 	private var displays: [CGDirectDisplayID: Display] = [:]
-	
-	internal var increaseBrightnessAction: KeyboardShortcutsManager.KeyAction?
-	internal var decreaseBrightnessAction: KeyboardShortcutsManager.KeyAction?
-	
+
 	@objc internal dynamic var changeBrightnessOnAllDisplaysAtOnce: NSNumber = 1
 	@objc internal dynamic var changeBrightnessOnAllDisplaysAtOnceRequiresCommand: NSNumber = 1
 	
-	@objc internal dynamic var decreaseBrightnessKey: NSString = "F9" {
-		didSet {
-			self.decreaseBrightnessAction?.key = self.decreaseBrightnessKey as String
-		}
-	}
-	
-	@objc internal dynamic var increaseBrightnessKey: NSString = "F10" {
-		didSet {
-			self.increaseBrightnessAction?.key = self.increaseBrightnessKey as String
-		}
-	}
+	@objc internal dynamic var decreaseBrightnessKey: NSString = "F9"
+	@objc internal dynamic var increaseBrightnessKey: NSString = "F10"
 	
 	internal static let shared = BrightnessManager()
 	
@@ -242,21 +230,26 @@ internal class BrightnessManager: NSObject {
 		
 		self.bind(NSBindingName(rawValue: "changeBrightnessOnAllDisplaysAtOnce"), to: NSUserDefaultsController.shared, withKeyPath: "values.changeBrightnessOnAllDisplaysAtOnce")
 		self.bind(NSBindingName(rawValue: "changeBrightnessOnAllDisplaysAtOnceRequiresCommand"), to: NSUserDefaultsController.shared, withKeyPath: "values.changeBrightnessOnAllDisplaysAtOnceRequiresCommand")
-		
-		if KeyboardShortcutsManager.shared.isRegistered {
-			self.bind(NSBindingName(rawValue: "decreaseBrightnessKey"), to: NSUserDefaultsController.shared, withKeyPath: "values.decreaseBrightnessKey")
-			self.bind(NSBindingName(rawValue: "increaseBrightnessKey"), to: NSUserDefaultsController.shared, withKeyPath: "values.increaseBrightnessKey")
-			
-			self.decreaseBrightnessAction = KeyboardShortcutsManager.shared.addHandler(forKey: self.decreaseBrightnessKey as String, handler: self.decreaseBrightnessHandler)
-			self.increaseBrightnessAction = KeyboardShortcutsManager.shared.addHandler(forKey: self.increaseBrightnessKey as String, handler: self.increaseBrightnessHandler)
-		}
+        self.bind(NSBindingName(rawValue: "decreaseBrightnessKey"), to: NSUserDefaultsController.shared, withKeyPath: "values.decreaseBrightnessKey")
+        self.bind(NSBindingName(rawValue: "increaseBrightnessKey"), to: NSUserDefaultsController.shared, withKeyPath: "values.increaseBrightnessKey")
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.increaseBrightnessNoti), name: NSNotification.Name("increaseBrightnessNoti"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.decreaseBrightnessNoti), name: NSNotification.Name("decreaseBrightnessNoti"), object: nil)
 	}
-	
-	private func increaseBrightnessHandler(flags: CGEventFlags) {
-		let optShiftPressed = flags.contains(.maskAlternate) && flags.contains(.maskShift)
-		let commandPressed = flags.contains(.maskCommand)
+
+    @objc func increaseBrightnessNoti() {
+        increaseBrightnessHandler()
+    }
+
+    @objc func decreaseBrightnessNoti() {
+        decreaseBrightnessHandler()
+    }
+
+	private func increaseBrightnessHandler() {
+		let optShiftPressed = false
+		let commandPressed = true
 		
-		if self.changeBrightnessOnAllDisplaysAtOnce.boolValue && self.changeBrightnessOnAllDisplaysAtOnceRequiresCommand.boolValue == commandPressed {
+		if false && self.changeBrightnessOnAllDisplaysAtOnceRequiresCommand.boolValue == commandPressed {
 			for displayID in type(of: self).getAllDisplayIDs() {
 				self.increaseBrightness(onDisplay: displayID, useQuarterSteps: optShiftPressed)
 			}
@@ -267,11 +260,11 @@ internal class BrightnessManager: NSObject {
 		}
 	}
 	
-	private func decreaseBrightnessHandler(flags: CGEventFlags) {
-		let optShiftPressed = flags.contains(.maskAlternate) && flags.contains(.maskShift)
-		let commandPressed = flags.contains(.maskCommand)
+	private func decreaseBrightnessHandler() {
+        let optShiftPressed = false
+        let commandPressed = true
 		
-		if self.changeBrightnessOnAllDisplaysAtOnce.boolValue && self.changeBrightnessOnAllDisplaysAtOnceRequiresCommand.boolValue == commandPressed {
+		if false && self.changeBrightnessOnAllDisplaysAtOnceRequiresCommand.boolValue == commandPressed {
 			for displayID in type(of: self).getAllDisplayIDs() {
 				self.decreaseBrightness(onDisplay: displayID, useQuarterSteps: optShiftPressed)
 			}

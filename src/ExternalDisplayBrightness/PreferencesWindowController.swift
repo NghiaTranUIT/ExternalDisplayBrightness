@@ -2,13 +2,11 @@ import AppKit
 
 // Controls the preferences window
 class PreferencesWindowController: NSWindowController, NSWindowDelegate {
-	@IBOutlet private weak var decreaseBrightnessKey: NSPopUpButton?
-	@IBOutlet private weak var increaseBrightnessKey: NSPopUpButton?
-	
+
+    @IBOutlet weak var brightnessStepper: NSStepper!
+
 	// needed to access the singleton from Interface Builder
 	@objc dynamic weak var sharedLoginItemManager = LoginItemManager.shared
-	
-	@objc dynamic var showCaution: Bool = false
 	@objc dynamic var isPrivileged: Bool {
 		return AXIsProcessTrusted()
 	}
@@ -20,7 +18,6 @@ class PreferencesWindowController: NSWindowController, NSWindowDelegate {
 	override func windowDidLoad() {
 		super.windowDidLoad()
 		self.window?.center()
-		self.updateShowCaution()
 	}
 	
 	override func showWindow(_ sender: Any?) {
@@ -32,14 +29,18 @@ class PreferencesWindowController: NSWindowController, NSWindowDelegate {
 	}
 	
 	func windowWillClose(_: Notification) {
-		(NSApplication.shared.delegate as? AppDelegate)?.deactivateApp()
+        
 	}
 	
 	func windowDidUpdate(_: Notification) {
 		LoginItemManager.shared.updateEnabled()
 	}
 	
-	@IBAction private func updateShowCaution(_: Any? = nil) {
-		self.showCaution = self.decreaseBrightnessKey?.titleOfSelectedItem == self.increaseBrightnessKey?.titleOfSelectedItem
-	}
+    @IBAction func increaseOnChange(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name("increaseBrightnessNoti"), object: nil)
+    }
+
+    @IBAction func desceaseOnChange(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name("decreaseBrightnessNoti"), object: nil)
+    }
 }
